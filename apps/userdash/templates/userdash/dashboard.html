@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h3 class="col-md-2">Test App</h3>
+            <a href="/dashboard" class="col-md-1"><strong>Dashboard</strong></a>
+            <a href="/users/show/{{user.id}}" class="col-md-8">My Profile</a>
+            <a href="/logoff" class="col-md-1">Log Off</a>
+            <br>
+            <br>
+        </div>
+        <div class="row">
+            <h2 class="col-md-9">All Users</h2>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Email</td>
+                <td>Created On</td>
+                <td>User Level</td>
+            </thead>
+            <tbody>
+                {% for x in allusers %}
+                <tr>
+                    <td>{{x.id}}</td>
+                    <td><a href="/users/show/{{x.id}}">{{x.first}} {{x.last}}</a></td>
+                    <td>{{x.email}}</td>
+                    <td>{{x.created_at|date:"F d, Y"}}</td>
+                    <td>
+                        {% if x.user_level == 9 %}
+                            Admin
+                        {% else %}
+                            Normal
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

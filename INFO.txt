@@ -1,0 +1,4 @@
+Optional (but highly recommended) Assignment: User Dashboard
+Complete the wireframe using Django.
+
+(user-dashboard.pdf)

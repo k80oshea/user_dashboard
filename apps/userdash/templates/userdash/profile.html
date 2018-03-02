@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if logged.id == user.id %}
+            My Profile
+        {% else %}
+            User Information
+        {% endif %}
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row sticky-top">
+            <h3 class="col-md-2">Test App</h3>
+            <a href="/dashboard" class="col-md-1">Dashboard</a>
+            <a href="/users/show/{{logged.id}}" class="col-md-6"><strong>My Profile</strong></a>
+            <a href="/users/edit" class="col-md-2">
+                {% if logged.id == user.id %}
+                    Edit My Profile
+                {% endif %}
+            </a>
+            <a href="/logoff" class="col-md-1 ">Log Off</a>
+            <br>
+            <br>
+        </div>
+        <div class="row sticky">
+            <table>
+                <title>{{user.first}} {{user.last}}</title>
+                <tbody>
+                    <tr>
+                        <td>Registered at:</td>
+                        <td>{{user.created_at|date:"F d, Y"}}</td>
+                    </tr>
+                    <tr>
+                        <td>User ID:</td>
+                        <td>#{{user.id}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email address:</td>
+                        <td>{{user.email}}</td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td>{{user.desc}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% if logged.id != user.id %}
+            <div class="post_message" style="margin: 10px 0px;">
+                <form action="/post/msg/{{user.id}}" method="POST" class="form-control">
+                    {% csrf_token %}
+                    <label for="text"><strong>Leave a message for {{user.first}}</strong></label>
+                    <textarea class="form-control" rows=3 cols=80 name="text"></textarea><br>
+                    <input type="submit" value="Post" class="btn btn-success btn-sm float-right">
+                </form>
+            </div>
+        {% endif %}
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="posts">
+            {% for msg in posted %}
+                <div class="group">
+                    <div class="message-head">
+                        <div class="row">
+                            <p class="col-md-10"><a href="/users/show/{{msg.sender.id}}">{{ msg.sender.first }} {{ msg.sender.last }}</a> wrote</p>
+                            <span class="col-md-2 text-right">{{ msg.created_at|date:"F d, Y" }}</span>
+                        </div>
+                        <p>{{ msg.message }}</p>
+                    </div>
+                    <div class="comment-body">
+                        {% for cmt in commented %}
+                            {% if cmt.msg.id == msg.id %}
+                                <div class="row">
+                                    <p class="col-md-10" style="padding-left: 25px;"><a href="/users/show/{{cmt.commenter.id}}">{{ cmt.commenter.first }} {{ cmt.commenter.last }}</a></p>
+                                    <span class="col-md-2 text-right">{{ cmt.created_at|date:"F d, Y" }}</span>
+                                </div>
+                                <p style="padding-left: 25px;">{{ cmt.comment }}</p>
+                            {% endif %}
+                        {% endfor %}
+                        <form action="/post/cmt/{{user.id}}/{{msg.id}}" method="POST" class="form-group"  style="margin-left: 25px; width: 75%;">
+                            {% csrf_token %}
+                            <textarea class="form-control" rows=2 name="text" placeholder="Leave a comment"></textarea><br>
+                            <input type="submit" value="Post" class="btn btn-success btn-sm float-right">
+                        </form>
+                    </div>
+                </div>   
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

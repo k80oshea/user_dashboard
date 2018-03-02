@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h3 class="col-md-10">Test App</h3>
+            <a href="/" class="col-md-1">Home</a>
+            <a href="/signin" class="col-md-1">Sign In</a>
+            <hr>
+        </div>
+        <div class="row align-self-center" style="margin-top: 50px;">
+            <div class="col-md-5">
+                <h4>Register</h4>
+                <form action="/user/create" method="post" class="form-control">
+                    {% csrf_token %}
+                    <div><label for="email">Email: </label><input type="text" name="email" placeholder="Enter Email"></div>
+                    <div><label for="first_name">First Name: </label><input type="text" name="first_name" placeholder="Enter First Name"></div>
+                    <div><label for="last_name">Last Name: </label><input type="text" name="last_name" placeholder="Enter Last Name"></div>
+                    <div><label for="password">Password: </label><input type="password" name="password" placeholder="Enter Password"></div>
+                    <div><label for="confirm">Confirm Password: </label><input type="password" name="confirm" placeholder="Confirm Password"></div>
+                    <div><input type="submit" value="Register" class="btn btn-success"></div> 
+                </form>
+                <a href="/signin">Already have an account? Login</a>
+            </div>
+            <div class="col-md-7">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}><strong>{{ message }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
